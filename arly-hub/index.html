@@ -2335,20 +2335,6 @@ vMathHome=function(m){const C=CS(),li=Math.min(C.li,COURSE.length-1),it=COURSE[l
    <section class="card"><h2>Recent lessons</h2>${(C.log||[]).slice(-8).reverse().map(x=>`<div class="spread small" style="border-top:1px dashed var(--rule);padding-top:6px"><span>${parseD(x.d).toLocaleDateString("en-US",{month:"short",day:"numeric"})} · ${esc(x.n)}</span><span class="pill ${x.pass?"st-strong":"st-low"}">${x.r} of 10${x.pass?" · passed":""}</span></div>`).join("")||`<p class="small muted">Your lesson results appear here.</p>`}</section>`+footer();
   $("#go").onclick=startCourse};
 
-/* --- Google Drive sync for the GitHub Pages copy (no Claude account needed) --- */
-const SYNC_KEY="arly-hub-7Kq2";
-function syncURL(){let u="";try{const h=new URLSearchParams(location.hash.slice(1)).get("sync");if(h){localStorage.setItem("arly-sync-url",h);history.replaceState(null,"",location.pathname)}u=localStorage.getItem("arly-sync-url")||""}catch(e){}return u||SYNC_DEFAULT}
-if(!(window.claude&&window.claude.use)){
-  Store.init=async function(){const u=syncURL();if(!u){this.badge();return}
-    try{const r=await fetch(u+"?key="+encodeURIComponent(SYNC_KEY)+"&t="+Date.now());const rs=await r.json();
-      if(rs&&rs.v===1&&(rs.updated||0)>(S.updated||0)&&!run){S=Object.assign(fresh(),rs);if(!S.plan||!S.plan.days||!S.plan.days.length)S.plan={days:[1,2,3,4,5]};fixStart();if(!S.les)S.les={};_schedKey="";try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}render()}
-      else if((S.updated||0)>((rs&&rs.updated)||0))await this.push();this.mode="drive"}catch(e){this.mode="device"}this.badge()};
-  Store.push=async function(){const u=syncURL();if(!u){this.badge();return}
-    try{await fetch(u,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:SYNC_KEY,state:S})});this.mode="drive"}catch(e){this.mode="device"}this.badge()};
-  Store.badge=function(){const b=$("#sync");if(b)b.textContent=this.mode==="drive"?"Progress saved to Dad's Drive":"Saved on this device"};
-  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){const u=syncURL();if(u&&navigator.sendBeacon)try{navigator.sendBeacon(u,new Blob([JSON.stringify({key:SYNC_KEY,state:S})],{type:"text/plain;charset=utf-8"}))}catch(e){}}});
-}
-
 /* ---------- boot ---------- */
 $$(".seg").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 $("#clock .cl-b").onclick=()=>{if(clock.running)clock.pause();else{clock.start(clock.subj);clock.autoPaused=false}};
