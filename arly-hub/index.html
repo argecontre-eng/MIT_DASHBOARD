@@ -428,13 +428,28 @@ h1,h2{font-weight:400;letter-spacing:.01em}
 .fl.boss{border-color:var(--hi)}
 .fl.cur{border-color:var(--ink);background:var(--pink);color:var(--on-pink);transform:scale(1.04)}
 @media (max-width:560px){.tower{min-width:0;width:100%}}
+.course-head{gap:4px}
+.worked{display:grid;gap:8px;background:var(--good-soft);border:2px solid var(--good);border-radius:10px;padding:12px 14px}
+.hero-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center}
+@media (max-width:640px){.hero-row{grid-template-columns:minmax(0,1fr)}}
+.cmap{display:grid;gap:10px}
+.cunit{display:grid;gap:6px}
+.cles{display:flex;gap:6px;flex-wrap:wrap}
+.cl{font-size:13.5px;padding:4px 10px;border-radius:99px;border:2px solid var(--rule);background:var(--field);color:var(--muted)}
+.cl.ok{border-color:var(--good);background:var(--good-soft);color:var(--ink)} .cl.cur{border-color:var(--ink);background:var(--pink);color:var(--on-pink);font-weight:700} .cl.test{border-style:dashed}
+.mins{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;align-items:end;height:110px}
+.mn{display:grid;grid-template-rows:1fr auto auto;height:100%;text-align:center;font-size:11px;gap:2px}
+.mn i{align-self:end;display:block;background:var(--rule);border-radius:4px 4px 0 0;min-height:2px}
+.mn.part i{background:var(--hi)} .mn.ok i{background:var(--good)}
+.mn b{font-family:var(--f-data);font-size:11px}
+.clock[hidden]{display:none!important}
 </style>
 <header class="top"><div class="topin">
  <div class="brand"><b><span>Arly's</span> Training Hub <small class="jpb">トレーニング</small></b>
-  <div class="clock" id="clock" hidden><span class="cl-ring"></span><span class="cl-txt"><b class="cl-t">25:00</b><small class="cl-l">Math</small></span><button class="btn sm ghost cl-b">Pause</button></div></div>
+  <div class="clock" id="clock" hidden><span class="cl-ring"></span><span class="cl-txt"><b class="cl-t">30:00</b><small class="cl-l">Math</small></span><button class="btn sm ghost cl-b">Pause</button></div></div>
  <nav class="segs" aria-label="Subjects">
-  <button class="seg" data-t="math"><span class="seg-n">Math</span><span class="seg-s">0 of 25 min today</span><span class="seg-bar"><i></i></span></button>
-  <button class="seg" data-t="reading"><span class="seg-n">Reading</span><span class="seg-s">0 of 25 min today</span><span class="seg-bar"><i></i></span></button>
+  <button class="seg" data-t="math"><span class="seg-n">Math</span><span class="seg-s">0 of 30 min today</span><span class="seg-bar"><i></i></span></button>
+  <button class="seg" data-t="reading"><span class="seg-n">Reading</span><span class="seg-s">0 of 30 min today</span><span class="seg-bar"><i></i></span></button>
  </nav></div></header>
 <canvas id="petals" aria-hidden="true"></canvas>
 <main id="main" aria-live="polite"></main>
@@ -1239,7 +1254,7 @@ const TEST_WORDS=[
  ["analyze","study something closely to understand its parts","analizar"],["evidence","facts or details that show something is true","evidencia"],["infer","figure out something the text doesn't say directly","inferir, deducir"],["conclude","decide something after thinking about the facts","concluir"],["compare","tell how things are alike","comparar"],["contrast","tell how things are different","contrastar"],["justify","give reasons that prove your answer","justificar"],["estimate","find an answer that is close, not exact","estimar"],["equivalent","equal in value","equivalente"],["expression","numbers and symbols that show a value, like 3 × (4 + 2)","expresión"],["variable","a letter that stands for a number","variable"],["parallel","lines that never meet","paralelo"],["perpendicular","lines that meet at a right angle","perpendicular"],["quadrilateral","a shape with 4 sides","cuadrilátero"],["volume","the amount of space inside a 3-D object","volumen"],["coordinate","a number that tells a position on a grid","coordenada"],["prototype","an early model built to test an idea","prototipo"],["criteria","what a design must do to succeed","criterios"],["constraint","a limit on a design, like cost or materials","restricción"],["organism","a living thing","organismo"],["ecosystem","living and nonliving things in one place that affect each other","ecosistema"],["predator","an animal that hunts other animals","depredador"],["evaporation","when a liquid turns into a gas","evaporación"],["central idea","the most important point of a text","idea central"]
 ];
 
-/* ===== Arly's Training Hub v2: two tabs, plan calendar, 25-minute timers ===== */
+/* ===== Arly's Training Hub v2: two tabs, plan calendar, 30-minute timers ===== */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const dkey=d=>d.toLocaleDateString("en-CA");
@@ -1292,7 +1307,7 @@ G.a1_balance=T=>{const n=T.int(2,10),a=T.int(2,6),b=T.int(1,12),R=a*n+b;
    explain:steps([`First undo + ${b}: subtract ${b} from both sides. ${R} − ${b} = ${R-b}, so ${a}${ni} = ${R-b}.`,`Then undo × ${a}: divide both sides by ${a}. ${R-b} ÷ ${a} = <b>${n}</b>.`,`Check: ${a} × ${n} + ${b} = ${a*n} + ${b} = ${R}.`])}};
 
 const SK=Object.fromEntries(SKILLS.map(s=>[s.id,s]));
-const GOAL=25*60; // seconds per subject per day
+const GOAL=30*60; // seconds per subject per day
 const SCORE_MAP="https://claude.ai/artifact/3zeKKmCywvYiJY8wqN99dX";
 
 const TEST_MIX={NF:6,NT:4,MD:4,OA:3,GE:3};
@@ -1432,10 +1447,10 @@ const les=k=>S.les[k]||(S.les[k]={steps:{}});
 const lessonDone=k=>!!(S.les[k]&&S.les[k].done);
 function missedLessons(){const t=today(),out=[];for(const [k] of buildSchedule(HORIZON)){if(k>=t)break;if(!lessonDone(k))out.push(k)}return out}
 function stepsForLesson(L,k){
-  if(!L)return[];const TOWER={k:"tower",t:"Sensei Tower",d:"Climb floor by floor until your 25 minutes are up. Every 3rd floor is a boss. It gets harder as you go."};if(L.kind==="test")return[{k:"test",mix:L.mix,t:L.t,d:"20 mixed questions, like the MCAS, with no answers shown until the end."},TOWER];
+  if(!L)return[];const TOWER={k:"tower",t:"Sensei Tower",d:"Climb floor by floor until your 30 minutes are up. Every 3rd floor is a boss. It gets harder as you go."};if(L.kind==="test")return[{k:"test",mix:L.mix,t:L.t,d:"20 mixed questions, like the MCAS, with no answers shown until the end."},TOWER];
   const old=S.errors.filter(e=>e.date<today()).length,st=[];
   const prior=[...buildSchedule(HORIZON)].filter(([d,x])=>d<k&&x.s).map(([,x])=>x.s);
-  if(L.kind==="mix"){st.push({k:"drill",pool:L.pool,t:L.t,d:"8 questions mixed from everything you've learned."});st.push({k:"tower",t:"Sensei Tower",d:"Climb floor by floor until your 25 minutes are up."});if(old)st.splice(1,0,{k:"fix",t:"Fix old mistakes",d:`${Math.min(3,new Set(S.errors.filter(e=>e.date<today()).map(e=>e.skill)).size)} skills you missed before, one question each.`});return st}
+  if(L.kind==="mix"){st.push({k:"drill",pool:L.pool,t:L.t,d:"8 questions mixed from everything you've learned."});st.push({k:"tower",t:"Sensei Tower",d:"Climb floor by floor until your 30 minutes are up."});if(old)st.splice(1,0,{k:"fix",t:"Fix old mistakes",d:`${Math.min(3,new Set(S.errors.filter(e=>e.date<today()).map(e=>e.skill)).size)} skills you missed before, one question each.`});return st}
   if(prior.length)st.push({k:"warm",prior,t:"Warm-up review",d:"3 quick questions from earlier lessons, so nothing is forgotten."});
   if(skillStat(L.s).n<10||skillStat(L.s).st==="low")st.push({k:"learn",skill:L.s,t:`Learn: ${SK[L.s].name}`,d:"The rule and two worked examples."});
   (S.reteach||[]).filter(x=>SK[x]&&G[x]&&x!==L.s).slice(0,1).forEach(x=>st.unshift({k:"reteach",skill:x,t:`Re-teach: ${SK[x].name}`,d:"A fresh look at a skill you kept missing: the rule and two worked examples."}));
@@ -1454,10 +1469,10 @@ const clock={subj:null,running:false,iv:null,last:0,saveAt:0,
   pause(){this.tick();this.running=false;clearInterval(this.iv);this.paint();Store.save()},
   stop(){if(this.running)this.tick();this.running=false;clearInterval(this.iv);this.subj=null;this.paint();Store.save()},
   tick(){if(!this.running)return;const now=Date.now(),dt=Math.min(5,Math.round((now-this.last)/1000));this.last=now;const d=day(),f=this.subj==="math"?"mm":"rm";
-    const before=d[f]||0;d[f]=before+dt;if(before<GOAL&&d[f]>=GOAL){finishDay(this.subj);showToast(`${this.subj==="math"?"Math":"Reading"}: 25 minutes done! Finish what you're on, then you're free.`)}
+    const before=d[f]||0;d[f]=before+dt;if(before<GOAL&&d[f]>=GOAL){finishDay(this.subj);showToast(`${this.subj==="math"?"Math":"Reading"}: 30 minutes done! Finish what you're on, then you're free.`)}
     if(now-this.saveAt>15000){this.saveAt=now;Store.save()}this.paint()},
   paint(){const el=$("#clock");if(!el)return;if(!this.subj){el.hidden=true;return}el.hidden=false;const u=used(this.subj),left=Math.max(0,GOAL-u),m=Math.floor(left/60),s=left%60;
-    el.querySelector(".cl-t").textContent=left>0?`${m}:${String(s).padStart(2,"0")}`:"Done";el.querySelector(".cl-l").textContent=(this.subj==="math"?"Math":"Reading")+(left>0?" · time left":" · 25 min reached");
+    el.querySelector(".cl-t").textContent=left>0?`${m}:${String(s).padStart(2,"0")}`:"Done";el.querySelector(".cl-l").textContent=(this.subj==="math"?"Math":"Reading")+(left>0?" · time left":" · 30 min reached");
     el.querySelector(".cl-ring").style.setProperty("--p",Math.min(1,u/GOAL));const b=el.querySelector(".cl-b");b.textContent=this.running?"Pause":"Resume";b.setAttribute("aria-pressed",!this.running);el.classList.toggle("paused",!this.running);paintTabs()}
 };
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&clock.running){clock.pause();clock.autoPaused=true}else if(!document.hidden&&clock.autoPaused&&clock.subj&&run){clock.autoPaused=false;clock.start(clock.subj)}});
@@ -1467,7 +1482,7 @@ function showToast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clea
 /* ---------- shell ---------- */
 let tab="math",run=null,calMonth={math:null,reading:null},calSel={math:today(),reading:today()};
 function paintTabs(){$$(".seg").forEach(b=>{const s=b.dataset.t,u=used(s),done=isDone(s,today());b.setAttribute("aria-current",tab===s?"page":"false");
-  b.querySelector(".seg-s").textContent=done?"Done today ✓":`${Math.floor(u/60)} of 25 min today`;b.querySelector(".seg-bar i").style.width=Math.min(100,u/GOAL*100)+"%"})}
+  b.querySelector(".seg-s").textContent=done?"Done today ✓":`${Math.floor(u/60)} of 30 min today`;b.querySelector(".seg-bar i").style.width=Math.min(100,u/GOAL*100)+"%"})}
 function setTab(t){if(run&&run.subj!==t){if(clock.running)clock.pause();}tab=t;run=run&&run.subj===t?run:null;window.scrollTo({top:0});render()}
 function render(){paintTabs();clock.paint();const m=$("#main");if(run&&run.subj===tab)return renderRun(m);tab==="math"?vMathHome(m):vReadHome(m)}
 
@@ -1486,7 +1501,7 @@ function todayCard(subj){
    <div class="hero-top"><div>${head}${!study&&!u&&subj!=="math"?`<p class="muted">Today is not on your study plan. You can still practice, and it counts.</p>`:""}</div>
    <div class="ring" style="--p:${Math.min(1,u/GOAL)}"><span><b>${done?"✓":Math.ceil(left/60)}</b><small>${done?"done":"min left"}</small></span></div></div>
    <ol class="steplist">${steps.map(s=>`<li class="${sd[s.k]?"done":""}"><b>${s.t}</b><span>${s.d}</span></li>`).join("")}</ol>
-   <button class="btn big" id="go">${done?"Keep practicing":u>0?`Continue · ${Math.ceil(left/60)} min left`:"Start 25 minutes"}</button>
+   <button class="btn big" id="go">${done?"Keep practicing":u>0?`Continue · ${Math.ceil(left/60)} min left`:"Start 30 minutes"}</button>
    <p class="small muted">The timer starts when you press the button and pauses if you leave the page.</p>
   </section>`;
 }
@@ -1497,7 +1512,7 @@ function roadmapHTML(){const t=today(),ph=phases(),ud=unitDates(),fmt=k=>parseD(
 function vMathHome(m){
   const miss=missedLessons();
   const cats=["NF","OA","GE","MD","NT","G6","ALG","G7"];
-  m.innerHTML=rankHTML()+todayCard("math")+weekHTML()+(miss.length?`<p class="note-miss">${miss.length} missed lesson${miss.length>1?"s":""}. Red days on the calendar: tap one to make it up.</p>`:"")+roadmapHTML()+calendarHTML("math")+`<details class="more"><summary>Practice any skill</summary>${cats.map(c=>`<h3 style="margin:12px 0 6px">${CAT_NAMES[c]}</h3><div class="skillgrid">${SKILLS.filter(s=>s.cat===c).map(s=>{const st=skillStat(s.id);return `<button class="skill" data-id="${s.id}"><span class="sn">${s.name}</span><span class="pill st-${st.st}">${st.label}${st.n?` · ${Math.round(st.acc*100)}%`:""}</span></button>`}).join("")}</div>`).join("")}<p class="small muted">Free practice counts toward today's 25 minutes.</p></details>`+footer();
+  m.innerHTML=rankHTML()+todayCard("math")+weekHTML()+(miss.length?`<p class="note-miss">${miss.length} missed lesson${miss.length>1?"s":""}. Red days on the calendar: tap one to make it up.</p>`:"")+roadmapHTML()+calendarHTML("math")+`<details class="more"><summary>Practice any skill</summary>${cats.map(c=>`<h3 style="margin:12px 0 6px">${CAT_NAMES[c]}</h3><div class="skillgrid">${SKILLS.filter(s=>s.cat===c).map(s=>{const st=skillStat(s.id);return `<button class="skill" data-id="${s.id}"><span class="sn">${s.name}</span><span class="pill st-${st.st}">${st.label}${st.n?` · ${Math.round(st.acc*100)}%`:""}</span></button>`}).join("")}</div>`).join("")}<p class="small muted">Free practice counts toward today's 30 minutes.</p></details>`+footer();
   $("#go").onclick=()=>startRun("math",{date:mathFocus().k});wireCal("math");
   $$(".skill").forEach(b=>b.onclick=()=>startRun("math",{free:b.dataset.id}));
 }
@@ -1533,7 +1548,7 @@ function calendarHTML(subj){
   return `<section class="card" id="cal"><div class="spread"><h2>${subj==="math"?"Math":"Reading"} plan</h2><div class="row"><button class="btn sm ghost" id="cprev" aria-label="Previous month">←</button><b class="cmonth">${first.toLocaleDateString("en-US",{month:"long",year:"numeric"})}</b><button class="btn sm ghost" id="cnext" aria-label="Next month">→</button></div></div>
   <div class="calgrid"><div class="ch">Mon</div><div class="ch">Tue</div><div class="ch">Wed</div><div class="ch">Thu</div><div class="ch">Fri</div><div class="ch">Sat</div><div class="ch">Sun</div>${cells.join("")}</div>
   <div class="legend small"><span><i class="lg done"></i>Done</span><span><i class="lg part"></i>Started</span><span><i class="lg plan"></i>Planned</span><span><i class="lg miss"></i>Missed</span></div>
-  <div class="cdetail"><div><b>${parseD(sel).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})}</b><br>${slab?esc(slab):"No session planned."} ${subj==="math"?(sst==="done"?"· Done.":sst==="part"?"· Started.":sst==="miss"?"· Missed.":""):(sst==="done"?`· Done, ${Math.round(su/60)} min.`:sst==="part"?`· ${Math.round(su/60)} of 25 min.`:sst==="miss"?"· Missed.":"")}</div>${subj==="math"&&lessonOn(sel)?`<button class="btn sm" id="calgo">${sst==="done"?"Do it again":sel>today()?"Start early":sst==="miss"?"Make it up now":"Start this lesson"}</button>`:""}</div>
+  <div class="cdetail"><div><b>${parseD(sel).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})}</b><br>${slab?esc(slab):"No session planned."} ${subj==="math"?(sst==="done"?"· Done.":sst==="part"?"· Started.":sst==="miss"?"· Missed.":""):(sst==="done"?`· Done, ${Math.round(su/60)} min.`:sst==="part"?`· ${Math.round(su/60)} of 30 min.`:sst==="miss"?"· Missed.":"")}</div>${subj==="math"&&lessonOn(sel)?`<button class="btn sm" id="calgo">${sst==="done"?"Do it again":sel>today()?"Start early":sst==="miss"?"Make it up now":"Start this lesson"}</button>`:""}</div>
   <div class="studydays"><span class="small muted">Study days:</span>${[1,2,3,4,5,6,0].map(d=>`<button class="dchip" data-d="${d}" aria-pressed="${S.plan.days.includes(d)}">${names[d]}</button>`).join("")}</div>
   <p class="small muted">${subj==="math"?"Each study day has its own lesson. Missed lessons stay red until you make them up. You can also start future lessons early.":"If a day is missed, the plan moves forward. Nothing gets skipped."}</p></section>`;
 }
@@ -1560,12 +1575,12 @@ Store.save();run.si++;run.sub=null;window.scrollTo({top:0});render()}
 function endRun(){clock.stop();run=null;window.scrollTo({top:0});render()}
 function renderRun(m){
   const total=run.steps.length;
-  const bar=`<div class="runhead"><div><div class="eyebrow">${run.subj==="math"?"Math":"Reading"}${run.free?" · free practice":` · step ${Math.min(run.si+1,total)} of ${total}`}</div><h2>${run.si<total?run.steps[run.si].t:"Bonus practice"}</h2></div><button class="btn sm ghost" id="stop">Stop for today</button></div>
+  const bar=`<div class="runhead"><div><div class="eyebrow">${run.subj==="math"?"Math":"Reading"}${run.free?" · free practice":` · step ${Math.min(run.si+1,total)} of ${total}`}</div><h2>${run.si<total?run.steps[run.si].t:"Bonus practice"}</h2></div><button class="btn sm ghost" id="stop">${run&&!run.free&&used(run.subj)<GOAL?"Pause":"Stop for today"}</button></div>
   ${run.free?"":`<div class="stepper">${run.steps.map((s,i)=>`<span class="${i<run.si?"ok":i===run.si?"cur":""}">${s.t}</span>`).join("")}</div>`}<div id="stage"></div>`;
-  m.innerHTML=bar;$("#stop").onclick=endRun;const st=$("#stage");
+  m.innerHTML=bar;$("#stop").onclick=()=>{if(run&&!run.free&&used(run.subj)<GOAL&&!run._stopOk){run._stopOk=true;showToast("Your 30 minutes aren't done yet. Tap Pause again to stop now and finish later today.");setTimeout(()=>{if(run)run._stopOk=false},6000);return}if(run&&run.course){const d=day();if(used("math")>=GOAL)d.md=true}endRun()};const st=$("#stage");
   if(run.si>=total){if(run.free)return endRun();return bonus(st)}
   const s=run.steps[run.si];
-  ({tower:runTower,extra:runExtraRead,why:runWhy,detect:runDetect,reteach:runReteach,fix:runFix,warm:runWarm,learn:runLearn,drill:runDrill,drill2:runDrill,free:runDrill,book:runBook,test:runTest,words:runWords,article:runArticle,summary:runSummary,t1:(a,b)=>runSetText(a,b,"a"),t2:(a,b)=>runSetText(a,b,"b"),write:runWrite})[s.k](st,s);
+  ({course:runCourse,tower:runTower,extra:runExtraRead,why:runWhy,detect:runDetect,reteach:runReteach,fix:runFix,warm:runWarm,learn:runLearn,drill:runDrill,drill2:runDrill,free:runDrill,book:runBook,test:runTest,words:runWords,article:runArticle,summary:runSummary,t1:(a,b)=>runSetText(a,b,"a"),t2:(a,b)=>runSetText(a,b,"b"),write:runWrite})[s.k](st,s);
 }
 
 /* ---------- question loop (shared) ---------- */
@@ -1716,9 +1731,9 @@ function runBook(st,s){
   $("#bnext").onclick=stepDone;$("#bskip").onclick=stepDone;
   if(B.done[e.n])check(true);
 }
-function bonus(st){if(run.subj==="math"&&used("math")<GOAL&&!run.free){showToast("Time is not up yet. Back to the tower!");return runTower(st,{})}
+function bonus(st){if(run.subj==="reading"&&used("reading")<GOAL&&!run.free){showToast("Keep reading until your 30 minutes are done.");return runExtraRead(st,{})}if(run.subj==="math"&&used("math")<GOAL&&!run.free){showToast("Time is not up yet. Back to the tower!");return runTower(st,{})}
   const left=Math.max(0,GOAL-used(run.subj));
-  st.innerHTML=`<div class="card score pass"><h2>${left>0?`All steps done. ${Math.ceil(left/60)} minutes left on the timer.`:"25 minutes done. Great work."}</h2><p>${left>0?"Use the rest of your 25 minutes for a bonus round. The day counts as done when the timer reaches 0.":"You can stop now, or keep going for extra practice."}</p><div class="row">${run.subj==="math"?`<button class="btn" id="bon">Bonus: weakest skill</button>`:`<button class="btn" id="bon">Extra read: ${esc(extraRead().title)}</button><button class="btn ghost" id="bon2">More word practice</button>`}<button class="btn ghost" id="fin">Stop for today</button></div></div>`;
+  st.innerHTML=`<div class="card score pass"><h2>${left>0?`All steps done. ${Math.ceil(left/60)} minutes left on the timer.`:"30 minutes done. Great work."}</h2><p>${left>0?"Use the rest of your 30 minutes for a bonus round. The day counts as done when the timer reaches 0.":"You can stop now, or keep going for extra practice."}</p><div class="row">${run.subj==="math"?`<button class="btn" id="bon">Bonus: weakest skill</button>`:`<button class="btn" id="bon">Extra read: ${esc(extraRead().title)}</button><button class="btn ghost" id="bon2">More word practice</button>`}<button class="btn ghost" id="fin">Stop for today</button></div></div>`;
   $("#fin").onclick=endRun;
   $("#bon").onclick=()=>{if(run.subj==="math"){const w=[...SKILLS].filter(s=>s.level==="fix"&&skillStat(s.id).n>0).sort((a,b)=>skillStat(a.id).acc-skillStat(b.id).acc)[0]||SK.f_add;runDrill(st,{skill:w.id})}else{window.scrollTo({top:0});runArticle(st,{free:extraRead().id,bonus:true})}};
   if($("#bon2"))$("#bon2").onclick=()=>runWords(st,{bonus:true,n:10});
@@ -1988,7 +2003,7 @@ qLoop=function(st,L,onEnd){
   const get=wireInput(q,()=>{const n=$("#nxt");if(n&&!n.hidden)n.click();else $("#chk").click()});
   const msg=(cls,h)=>{$("#fb").innerHTML=`<div class="fb ${cls}">${h}</div>`};
   if(test){$("#chk").onclick=()=>{const v=get();let [r,m]=judgeQ(q,v);if(r==="retry"){msg("almost",m);return}
-      L.res[L.i]=r==="ok"||r==="almost";L.times[L.i]=Date.now()-L.qt;L.qt=Date.now();logQ(L.res[L.i]);L.i++;window.scrollTo({top:0});qLoop(st,L,onEnd)};return}
+      L.res[L.i]=r==="ok"||r==="almost";L.times[L.i]=Date.now()-L.qt;L.qt=Date.now();logQ(L.res[L.i]);L.i++;if(L.after)L.after(L);window.scrollTo({top:0});qLoop(st,L,onEnd)};return}
   let tries=0;
   $("#chk").onclick=()=>{if($("#chk").hidden)return;const v=get();let [r,m]=judgeQ(q,v);
     if(r==="blank"){msg("almost","Type or choose an answer first.");return}
@@ -2093,7 +2108,7 @@ const FAM={
    write:{q:`Explain how you can check if an answer makes sense.`,model:`I check if an answer makes sense by estimating first, because a quick estimate shows if the answer should be bigger or smaller than the numbers in the problem.`}})
 };
 function runWhy(st,s){const f=FAM[famOf(s.skill)]();const P=f.pick,ord=shuffleArr(P.o.map((_,i)=>i));let card=0,earned=0;
-  const fin=()=>{run.sayWhy=(run.sayWhy||0)+1;rec(S.rskill||(S.rskill={}),"explaining",earned>=2);Store.save();st.innerHTML=`<div class="card score pass"><h2>Say why: ${earned} of 3</h2><p>Explaining is how big test questions are scored. Same skill as "find the proof" in reading.</p><button class="btn" id="cont">Next step →</button></div>`;$("#cont").onclick=stepDone};
+  const fin=()=>{run.sayWhy=(run.sayWhy||0)+1;rec(S.rskill||(S.rskill={}),"explaining",earned>=2);Store.save();st.innerHTML=`<div class="card score pass"><h2>Say why: ${earned} of 3</h2><p>Explaining is how big test questions are scored. Same skill as "find the proof" in reading.</p><button class="btn" id="cont">Next →</button></div>`;$("#cont").onclick=()=>{if(run&&run._whyDone){const f=run._whyDone;run._whyDone=null;f()}else stepDone()}};
   const head=n=>`<div class="spread"><span class="eyebrow">Say why · card ${n} of 3</span><span class="small muted">${SK[s.skill]?SK[s.skill].name:""}</span></div>`;
   const c1=()=>{st.innerHTML=`<div class="card neko-card">${NEKO("happy")}<div style="display:grid;gap:10px;min-width:0">${head(1)}<p>${CPB}</p><div class="qprompt" style="font-size:19px">${P.q}</div>
      <div class="opts">${ord.map((k,i)=>`<button class="opt" data-k="${k}"><span class="ol">${"ABCD"[i]}</span><span>${P.o[k]}</span></button>`).join("")}</div><div id="wfb"></div></div></div>`;
@@ -2160,8 +2175,8 @@ readPlanAt=function(h){const si=Math.floor(h/2),half=h%2;if(si<SETS.length)retur
   const ranked=[...SETS].sort((a,b)=>setRatio(a)-setRatio(b)||(((S.reading[a.id]||{}).date)||"").localeCompare(((S.reading[b.id]||{}).date)||""));return{p:ranked[(si-SETS.length)%ranked.length],half,review:true}};
 function readTodayV5(){const d=S.days[today()];if(d&&SET_BY[d.rpid])return{p:SET_BY[d.rpid],half:d.rhalf==null?"full":d.rhalf,review:!!d.rrev};return readPlanAt(readHalfIndex(today()))}
 function readStepsV5(){const r=readTodayV5(),set=r.p;if(r.half==="full")return setSteps(set,true);
-  if(r.half===0)return[{k:"words",n:8,t:"Word Lab",d:"8 quick questions: word parts, science roots, test and math words."},{k:"t1",t:`Read: ${set.a.title}`,d:`${set.a.genre} · ${textWords(set.a)} words · 9 questions`},{k:"extra",t:"Extra read",d:"A short science article with questions, to fill your 25 minutes."}];
-  return[{k:"detect",t:"Word problem detective",d:"2 short cases: find the question, cross out the extra, solve."},{k:"t2",t:`Read: ${set.b.title}`,d:`${set.b.genre} · ${textWords(set.b)} words · questions on both texts`},{k:"write",t:"Write: Claim · Proof · Because",d:"A short answer with proof from both texts."},{k:"extra",t:"Extra read",d:"A short science article with questions, to fill your 25 minutes."}]}
+  if(r.half===0)return[{k:"words",n:8,t:"Word Lab",d:"8 quick questions: word parts, science roots, test and math words."},{k:"t1",t:`Read: ${set.a.title}`,d:`${set.a.genre} · ${textWords(set.a)} words · 9 questions`},{k:"extra",t:"Extra read",d:"A short science article with questions, to fill your 30 minutes."}];
+  return[{k:"detect",t:"Word problem detective",d:"2 short cases: find the question, cross out the extra, solve."},{k:"t2",t:`Read: ${set.b.title}`,d:`${set.b.genre} · ${textWords(set.b)} words · questions on both texts`},{k:"write",t:"Write: Claim · Proof · Because",d:"A short answer with proof from both texts."},{k:"extra",t:"Extra read",d:"A short science article with questions, to fill your 30 minutes."}]}
 
 /* --- 8. look and feel --- */
 const NEKO=(mood="")=>{const ink="#14213a";const eyes=mood==="happy"?`<path d="M31 64 q9 -11 18 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M71 64 q9 -11 18 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`:`<ellipse cx="40" cy="64" rx="9" ry="11.5" fill="${ink}"/><ellipse cx="80" cy="64" rx="9" ry="11.5" fill="${ink}"/><circle cx="43.5" cy="59" r="3.8" fill="#fff"/><circle cx="83.5" cy="59" r="3.8" fill="#fff"/>`;
@@ -2185,7 +2200,7 @@ function guard(msg){try{(S.errlog||(S.errlog=[])).push({t:new Date().toISOString
 window.addEventListener("error",e=>{if(e&&e.message&&!/ResizeObserver/.test(e.message))guard(e.message+" @"+(e.lineno||""))});
 window.addEventListener("unhandledrejection",e=>{const r=e&&e.reason;if(r&&r.code==="cancelled")return;guard("promise: "+(r&&(r.message||r.code)||r))});
 
-/* ===== v6: Sensei Tower — adaptive climb that fills the full 25 minutes ===== */
+/* ===== v6: Sensei Tower — adaptive climb that fills the full 30 minutes ===== */
 const TIERS=[
  ["Letters for numbers",["a1_eval","a1_mystery","a1_pattern"]],
  ["Balance puzzles",["a1_balance","oa_order","g6_pct"]],
@@ -2203,7 +2218,7 @@ function runTower(st,s){const TW=S.tower||(S.tower={floor:4,best:4,fails:0,clear
   const pool=TIERS[tier][1].filter(x=>G[x]&&SK[x]);const ids=(boss?shuffleArr(pool):weightedPick(pool,3)).slice(0,3);while(ids.length<3)ids.push(pool[0]);
   const left=Math.max(0,GOAL-used("math"));
   st.innerHTML=`<div class="card tower-card"><div class="spread"><div><div class="eyebrow">Sensei Tower · best floor ${TW.best}</div><h2>${boss?"★ BOSS FLOOR":"Floor"} ${f}</h2><p class="muted">${TIERS[tier][0]} · ${boss?"get all 3 right to clear it":"get 2 of 3 right to climb"}</p></div>${towerHTML(f)}</div>
-   <p class="small muted">${left>0?`${Math.ceil(left/60)} minutes left. Climb as high as you can before the timer ends.`:"25 minutes done. Keep climbing for extra stars, or stop here."}</p><div class="row"><button class="btn big" id="climb">Climb!</button>${left<=0?`<button class="btn ghost" id="tstop">Stop for today</button>`:""}</div></div>`;
+   <p class="small muted">${left>0?`${Math.ceil(left/60)} minutes left. Climb as high as you can before the timer ends.`:"30 minutes done. Keep climbing for extra stars, or stop here."}</p><div class="row"><button class="btn big" id="climb">Climb!</button>${left<=0?`<button class="btn ghost" id="tstop">Stop for today</button>`:""}</div></div>`;
   if($("#tstop"))$("#tstop").onclick=()=>stepDone();
   $("#climb").onclick=()=>{const L={qs:ids.map(x=>makeQ(x,rnd())),i:0,res:[],mode:"learn",label:q=>`Floor ${f} · ${SK[q.skill].name}`,onAnswer:(q,ok)=>{recordSkill(q.skill,ok);if(!ok&&TW.floor<=9)addError(q)}};
     qLoop(st,L,L=>{const r=L.res.filter(Boolean).length,cleared=r>=need;let note="";
@@ -2229,6 +2244,110 @@ function wireBackup(){const msg=h=>$("#bkmsg").innerHTML=h;
    const last=Object.keys(o.days).sort().pop()||"unknown";msg(`<div class="fb almost"><span>Load progress up to <b>${last}</b>? This replaces the progress on this device.</span><div class="row"><button class="btn sm" id="bkyes">Yes, load it</button><button class="btn sm ghost" id="bkno">Cancel</button></div></div>`);
    $("#bkno").onclick=()=>msg("");$("#bkyes").onclick=()=>{S=Object.assign(fresh(),o);Store.save();render();showToast("Progress loaded.")}}}
 const _renderBk=render;render=function(){_renderBk();try{if(!run&&$("#main")&&!$("#bkcard")){$("#main").insertAdjacentHTML("beforeend",backupCard());wireBackup();const since=S.lastCode?Math.round((parseD(today())-parseD(S.lastCode))/864e5):99;if(Store.mode==="device"&&since>0&&(parseD(today()).getDay()===5||since>=7)){$("#main").insertAdjacentHTML("afterbegin",`<section class="card" style="border-color:var(--pink)"><div class="spread"><div><h2>Code day!</h2><p class="small">Copy your progress code and send it to Dad, so Neko-sensei can plan your next week.</p></div><button class="btn" id="bkgo">Get my code</button></div></section>`);$("#bkgo").onclick=()=>{$("#bkcard").scrollIntoView({behavior:"smooth"});$("#bkcopy").click()}}}}catch(e){}};
+
+/* ===== v7: Algebra Course — placement, real lessons, 30 minutes a day, mastery to advance ===== */
+const COURSE_UNITS=[
+ ["Letters for numbers",["a1_words","a1_eval","a1_mystery","a1_pattern","a1_balance"]],
+ ["Signed numbers",["int_add","int_mul","int_order","rat_ops"]],
+ ["Algebraic expressions",["alg_translate","alg_eval","alg_like","alg_addpoly"]],
+ ["Equations and inequalities",["eq_1step","eq_2step","eq_both","eq_frac","eq_word","ineq"]],
+ ["Exponents and multiplying",["alg_exp","alg_monomul","alg_binmul","alg_special","alg_div"]],
+ ["Lines and systems",["lin_slope","lin_eval","line_eq","func_eval","sys_solve","sys_word"]],
+ ["Factoring",["fac_common","fac_diffsq","fac_trin","fac_perfect","fac_ax2","fac_group"]],
+ ["Radicals and quadratics",["rad_simplify","quad_sq","quad_solve","quad_formula"]],
+ ["Further algebra",["exp_neg","sci_not","sci_ops","frac_simplify","poly_long","fac_cubes","poly_trimul"]]
+].map(([n,a])=>[n,a.filter(x=>SK[x]&&G[x])]);
+const COURSE=[];COURSE_UNITS.forEach(([n,a],u)=>{a.forEach(id=>COURSE.push({id,u}));COURSE.push({test:true,u})});
+const NLES=COURSE.filter(x=>!x.test).length;
+const G6REV=["f_add","f_sub","f_compare","f_mulfrac","f_div","f_word","d_addsub","d_mult","oa_order","oa_gcflcm","m_conv"].filter(x=>SK[x]&&G[x]);
+const CS=()=>S.course||(S.course={placed:false,li:0,stage:"teach",passed:{},fails:0,lastWarm:"",log:[]});
+const lesNo=li=>COURSE.slice(0,li+1).filter(x=>!x.test).length;
+function courseHead(st,kicker,title,sub){return `<div class="card course-head"><div class="eyebrow">${kicker}</div><h2>${title}</h2>${sub?`<p class="muted">${sub}</p>`:""}</div>`}
+function startCourse(){run={subj:"math",steps:[{k:"course",t:"Algebra course"}],si:0,date:null,free:false,course:true};Store.save();clock.start("math");window.scrollTo({top:0});render()}
+function courseNext(){Store.save();if(!run)return;const st=$("#stage");if(!st)return render();window.scrollTo({top:0});
+  if(used("math")>=GOAL&&!run.extra)return courseDone(st);runCourse(st)}
+function courseDone(st){const C=CS(),t=today(),done=(C.log||[]).filter(x=>x.d===t&&x.pass);
+  st.innerHTML=`<div class="card score pass"><h2>30 minutes done! お疲れさま!</h2><p>${done.length?`Today you passed: <b>${done.map(x=>esc(x.n)).join(", ")}</b>.`:"You kept working on your lesson. Tomorrow you pick up exactly where you stopped."}</p>
+   <p class="small muted">Now on lesson ${lesNo(C.li)} of ${NLES}: ${esc(COURSE[C.li]&&!COURSE[C.li].test?SK[COURSE[C.li].id].name:"Unit test")}</p>
+   <div class="row"><button class="btn" id="cfin">Finish for today</button><button class="btn ghost" id="cmore">Keep going for extra stars</button></div></div>`;
+  $("#cfin").onclick=()=>{const d=day();d.md=true;Store.save();endRun()};$("#cmore").onclick=()=>{run.extra=true;runCourse(st)}}
+function runCourse(st){const C=CS();
+  if(!C.placed)return coursePlace(st);
+  if(C.lastWarm!==today()&&G6REV.length)return courseWarm(st);
+  if(C.li>=COURSE.length){st.innerHTML=`<div class="card"><h2>Course complete!</h2><p>Every lesson passed. Ask Dad for the next level.</p></div>`;return}
+  const item=COURSE[C.li];if(item.test)return courseTest(st,item);
+  const id=item.id,sk=SK[id],unit=COURSE_UNITS[item.u][0],head=courseHead(st,`Unit ${item.u+1}: ${esc(unit)} · Lesson ${lesNo(C.li)} of ${NLES}`,esc(sk.name),null);
+  if(C.stage==="teach"||C.stage==="reteach")return courseTeach(st,id,head,C.stage==="reteach");
+  if(C.stage==="guided")return courseGuided(st,id,head);
+  if(C.stage==="practice")return coursePractice(st,id,head);
+  if(C.stage==="why")return courseWhy(st,id,head);
+  C.stage="teach";runCourse(st)}
+function courseTeach(st,id,head,re){const C=CS(),sk=SK[id],n=re?2:3,exs=Array.from({length:n},()=>makeQ(id,rnd()));let i=0;
+  const draw=()=>{const q=exs[i];st.innerHTML=head+`<div class="card neko-card">${NEKO(re?"":"happy")}<div style="display:grid;gap:10px;min-width:0"><div class="eyebrow">${re?"Let's look again":"Learn"} · example ${i+1} of ${n}</div>
+     <div class="rule"><b>The rule:</b> ${sk.rule}</div><div class="qprompt">${q.prompt}</div>${q.vis?`<div class="qvis">${q.vis}</div>`:""}
+     <div class="worked"><b>Answer: ${showAnswerHTML(q)}</b><div><b>How to solve it</b>${q.explain}</div></div>
+     <p class="small muted">Read every step. Cover the answer with your hand and try to explain each step out loud.</p>
+     <div class="row">${i>0?`<button class="btn ghost" id="tb">← Back</button>`:""}<button class="btn" id="tn">${i<n-1?"Next example →":"I'm ready to try →"}</button></div></div></div>`;
+    if($("#tb"))$("#tb").onclick=()=>{i--;draw()};$("#tn").onclick=()=>{if(i<n-1){i++;window.scrollTo({top:0});draw()}else{C.stage=re?"practice":"guided";courseNext()}}};draw()}
+function courseGuided(st,id,head){const C=CS();let extra=0;
+  const L={qs:Array.from({length:4},()=>makeQ(id,rnd())),i:0,res:[],mode:"learn",rule:SK[id].rule,label:()=>"Try it with help",onAnswer:(q,ok)=>{recordSkill(id,ok);if(!ok&&extra<2){extra++;L.qs.push(makeQ(id,rnd()))}}};
+  st.innerHTML=head;const box=document.createElement("div");box.style.display="grid";box.style.gap="14px";st.appendChild(box);
+  qLoop(box,L,()=>{C.stage="practice";courseNext()})}
+function coursePractice(st,id,head){const C=CS();
+  const L={qs:Array.from({length:10},()=>makeQ(id,rnd())),i:0,res:[],mode:"learn",label:()=>"Practice · pass with 8 of 10",onAnswer:(q,ok)=>{recordSkill(id,ok);if(!ok)addError(q)}};
+  st.innerHTML=head;const box=document.createElement("div");box.style.display="grid";box.style.gap="14px";st.appendChild(box);
+  qLoop(box,L,L=>{const r=L.res.filter(Boolean).length,pass=r>=8;(C.log||(C.log=[])).push({d:today(),n:SK[id].name,id,r,pass});if(C.log.length>200)C.log=C.log.slice(-200);
+    if(pass){C.stage="why";C.fails=0;sfx("up")}else{C.fails=(C.fails||0)+1;C.stage="reteach";sfx("save")}Store.save();
+    box.innerHTML=`<div class="card score ${pass?"pass":"fail"}"><h2>${r} of 10 ${pass?"· Passed!":"· Not yet"}</h2><p>${pass?"Next: explain why it works, then the next lesson.":"You need 8 of 10. Let's look at two more worked examples, then practice again with new questions."}</p><button class="btn" id="cn">${pass?"Next →":"Look again →"}</button></div>`;$("#cn").onclick=courseNext})}
+function courseWhy(st,id,head){const C=CS();st.innerHTML=head;const box=document.createElement("div");st.appendChild(box);run._whyDone=()=>{C.passed[id]=true;C.li++;C.stage="teach";Store.save();courseNext()};runWhy(box,{skill:id})}
+function courseWarm(st){const C=CS();const ids=weightedPick(G6REV,3);
+  const L={qs:ids.map(x=>makeQ(x,rnd())),i:0,res:[],mode:"learn",label:q=>"Grade 6 warm-up: "+SK[q.skill].name,onAnswer:(q,ok)=>{recordSkill(q.skill,ok);if(!ok)addError(q)}};
+  st.innerHTML=courseHead(st,"Warm-up · 3 questions","Keep your Grade 6 skills sharp","These are on the MCAS. Then straight into algebra.");const box=document.createElement("div");box.style.display="grid";box.style.gap="14px";st.appendChild(box);
+  qLoop(box,L,()=>{C.lastWarm=today();courseNext()})}
+function courseTest(st,item){const C=CS(),skills=COURSE_UNITS[item.u][1];const ids=[];for(let k=0;ids.length<10;k++)ids.push(skills[k%skills.length]);
+  st.innerHTML=courseHead(st,`Unit ${item.u+1} test · boss battle`,`★ ${esc(COURSE_UNITS[item.u][0])}`,"10 questions, no help until the end. Pass with 8.");const box=document.createElement("div");box.style.display="grid";box.style.gap="14px";st.appendChild(box);
+  const L={qs:shuffleArr(ids).map(x=>makeQ(x,rnd())),i:0,res:[],times:[],qt:Date.now(),mode:"test",label:()=>"Unit test"};
+  qLoop(box,L,L=>{const r=L.res.filter(Boolean).length,pass=r>=8;L.qs.forEach((q,i)=>recordSkill(q.skill,!!L.res[i]));(C.log||(C.log=[])).push({d:today(),n:`Unit ${item.u+1} test`,r,pass});
+    const miss=[...new Set(L.qs.filter((q,i)=>!L.res[i]).map(q=>q.skill))];
+    if(pass){C.li++;C.stage="teach";sfx("hat")}else{sfx("save");const back=COURSE.findIndex(x=>x.id===miss[0]);if(back>=0){C.retestFrom=C.li;C.li=back;C.stage="reteach"}}Store.save();
+    box.innerHTML=`<div class="card score ${pass?"pass":"fail"}"><h2>Unit test: ${r} of 10 ${pass?"· Boss defeated!":"· Not yet"}</h2>
+      <div class="rev">${L.qs.map((q,i)=>`<div class="item ${L.res[i]?"ok":"no"}"><span class="num">${i+1}</span><span class="q">${q.prompt}<br><span class="small">Answer: ${showAnswerHTML(q)}</span></span><span>${L.res[i]?"✓":"✗"}</span></div>`).join("")}</div>
+      <p>${pass?"On to the next unit.":`Review needed: <b>${miss.map(x=>SK[x].name).join(", ")}</b>. You'll redo that lesson, then take the test again.`}</p><button class="btn" id="cn">Next →</button></div>`;$("#cn").onclick=courseNext})}
+/* placement: one question per lesson, stop after 2 misses in a row */
+function coursePlace(st){const C=CS(),order=COURSE.map((x,i)=>i).filter(i=>!COURSE[i].test);let p=0;const tried=[];
+  st.innerHTML=courseHead(st,"Placement check","Let's find your level","One question per lesson, getting harder. Answer what you can. When you miss two in a row, we stop and start you at the right lesson. Don't guess wildly: a wrong guess puts you higher than you're ready for.");
+  const box=document.createElement("div");box.style.display="grid";box.style.gap="14px";st.appendChild(box);
+  const L={qs:[makeQ(COURSE[order[0]].id,rnd())],i:0,res:[],times:[],qt:Date.now(),mode:"test",label:()=>`Placement · question ${p+1}`,
+    after:L=>{tried.push(p);const n=L.res.length,miss2=n>=2&&!L.res[n-1]&&!L.res[n-2];p++;if(!miss2&&p<order.length&&p<24)L.qs.push(makeQ(COURSE[order[p]].id,rnd()))}};
+  qLoop(box,L,L=>{const firstMiss=L.res.findIndex(x=>!x);let start=firstMiss<0?order[Math.min(L.res.length,order.length-1)]:order[firstMiss];
+    for(let i=0;i<start;i++)if(!COURSE[i].test)C.passed[COURSE[i].id]=true;C.li=start;C.stage="teach";C.placed=true;C.placedAt=today();Store.save();sfx("up");
+    box.innerHTML=`<div class="card score pass"><h2>You start at lesson ${lesNo(start)} of ${NLES}</h2><p><b>${esc(COURSE[start].test?"Unit test":SK[COURSE[start].id].name)}</b> · Unit ${COURSE[start].u+1}: ${esc(COURSE_UNITS[COURSE[start].u][0])}</p><p class="small muted">${L.res.filter(Boolean).length} of ${L.res.length} right. Lessons before this one are marked as passed.</p><button class="btn" id="cn">Start learning →</button></div>`;$("#cn").onclick=courseNext})}
+/* math home: the course */
+vMathHome=function(m){const C=CS(),li=Math.min(C.li,COURSE.length-1),it=COURSE[li],mins=Math.round(used("math")/60),pct=Math.min(1,used("math")/GOAL);
+  const last14=Array.from({length:14},(_,i)=>addDays(today(),i-13)).map(k=>({k,m:Math.round(((S.days[k]||{}).mm||0)/60)}));
+  m.innerHTML=rankHTML()+`<section class="hero"><div class="hero-row"><div style="display:grid;gap:10px;min-width:0"><div class="eyebrow">Algebra course · ${C.placed?`lesson ${lesNo(li)} of ${NLES}`:"start with a placement check"}</div>
+    <h1>${C.placed?esc(it.test?`Unit ${it.u+1} test`:SK[it.id].name):"Find your algebra level"}</h1><p class="muted">${C.placed?`Unit ${it.u+1}: ${esc(COURSE_UNITS[it.u][0])}${it.test?"":` · ${({teach:"learn the rule",reteach:"look again",guided:"try with help",practice:"practice (pass 8 of 10)",why:"explain why"})[C.stage]||""}`}`:"About 10 minutes. Then lessons start at your level."}</p>
+    <p><b>Every day: 30 minutes.</b> A Grade 6 warm-up, then learn → try with help → practice → explain why. Pass the lesson and the next one starts right away. You don't stop when a lesson ends: you stop when the 30 minutes are done.</p>
+    <div class="row"><button class="btn big" id="go">${mins>=30?"Keep going (extra stars)":mins>0?`Continue · ${30-mins} min left`:"Start today's 30 minutes"}</button></div></div>
+    <div class="ring" style="--p:${pct}"><span><b>${mins}</b> of 30 min</span></div></div></section>
+   <section class="card"><div class="spread"><h2>Your course</h2><span class="small muted">${Object.keys(C.passed).length} of ${NLES} lessons passed</span></div><div class="cmap">${COURSE_UNITS.map(([n,a],u)=>`<div class="cunit"><b>Unit ${u+1} · ${esc(n)}</b><div class="cles">${a.map(id=>{const i=COURSE.findIndex(x=>x.id===id);return `<span class="cl ${C.passed[id]?"ok":i===C.li?"cur":""}" title="${esc(SK[id].name)}">${C.passed[id]?"✓ ":i===C.li?"▶ ":""}${esc(SK[id].name)}</span>`}).join("")}<span class="cl test ${C.li>COURSE.findIndex(x=>x.test&&x.u===u)?"ok":""}">★ Unit test</span></div></div>`).join("")}</div></section>
+   <section class="card"><div class="spread"><h2>Minutes, last 14 days</h2><span class="small muted">Goal: 30 a day</span></div><div class="mins">${last14.map(x=>`<div class="mn ${x.m>=30?"ok":x.m>0?"part":""}"><i style="height:${Math.min(100,x.m/30*100)}%"></i><span>${parseD(x.k).toLocaleDateString("en-US",{weekday:"narrow"})}</span><b>${x.m||""}</b></div>`).join("")}</div></section>
+   <section class="card"><h2>Recent lessons</h2>${(C.log||[]).slice(-8).reverse().map(x=>`<div class="spread small" style="border-top:1px dashed var(--rule);padding-top:6px"><span>${parseD(x.d).toLocaleDateString("en-US",{month:"short",day:"numeric"})} · ${esc(x.n)}</span><span class="pill ${x.pass?"st-strong":"st-low"}">${x.r} of 10${x.pass?" · passed":""}</span></div>`).join("")||`<p class="small muted">Your lesson results appear here.</p>`}</section>`+footer();
+  $("#go").onclick=startCourse};
+
+/* --- Google Drive sync for the GitHub Pages copy (no Claude account needed) --- */
+const SYNC_KEY="arly-hub-7Kq2";
+function syncURL(){let u="";try{const h=new URLSearchParams(location.hash.slice(1)).get("sync");if(h){localStorage.setItem("arly-sync-url",h);history.replaceState(null,"",location.pathname)}u=localStorage.getItem("arly-sync-url")||""}catch(e){}return u||SYNC_DEFAULT}
+if(!(window.claude&&window.claude.use)){
+  Store.init=async function(){const u=syncURL();if(!u){this.badge();return}
+    try{const r=await fetch(u+"?key="+encodeURIComponent(SYNC_KEY)+"&t="+Date.now());const rs=await r.json();
+      if(rs&&rs.v===1&&(rs.updated||0)>(S.updated||0)&&!run){S=Object.assign(fresh(),rs);if(!S.plan||!S.plan.days||!S.plan.days.length)S.plan={days:[1,2,3,4,5]};fixStart();if(!S.les)S.les={};_schedKey="";try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}render()}
+      else if((S.updated||0)>((rs&&rs.updated)||0))await this.push();this.mode="drive"}catch(e){this.mode="device"}this.badge()};
+  Store.push=async function(){const u=syncURL();if(!u){this.badge();return}
+    try{await fetch(u,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:SYNC_KEY,state:S})});this.mode="drive"}catch(e){this.mode="device"}this.badge()};
+  Store.badge=function(){const b=$("#sync");if(b)b.textContent=this.mode==="drive"?"Progress saved to Dad's Drive":"Saved on this device"};
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){const u=syncURL();if(u&&navigator.sendBeacon)try{navigator.sendBeacon(u,new Blob([JSON.stringify({key:SYNC_KEY,state:S})],{type:"text/plain;charset=utf-8"}))}catch(e){}}});
+}
 
 /* ---------- boot ---------- */
 $$(".seg").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
